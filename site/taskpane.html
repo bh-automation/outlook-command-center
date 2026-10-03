@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://appsforoffice.microsoft.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://appsforoffice.microsoft.com; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Precision Workspace</title>
+  <link rel="stylesheet" href="taskpane.css">
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="logic.js" defer></script>
+  <script src="taskpane.js" defer></script>
+</head>
+<body>
+  <main class="pane" id="pane">
+    <header class="head">
+      <p class="eyebrow">Benedict</p>
+      <h1 class="title">Precision Workspace</h1>
+    </header>
+
+    <section class="context" aria-labelledby="ctx-label">
+      <h2 class="section-label" id="ctx-label">Aktuelle Nachricht</h2>
+      <p class="ctx-from" id="ctx-from">–</p>
+      <p class="ctx-subject" id="ctx-subject">–</p>
+      <div class="ctx-meta">
+        <span class="ctx-status-label">Status</span>
+        <span class="ctx-status" id="ctx-status">kein Status</span>
+      </div>
+      <ul class="chips" id="ctx-categories" aria-label="Kategorien der Nachricht"></ul>
+    </section>
+
+    <div class="lattice" aria-hidden="true">
+      <div class="lattice-stage">
+        <div class="lattice-object" id="lattice">
+          <svg class="layer layer-grid" viewBox="0 0 200 200">
+            <defs>
+              <radialGradient id="fade" cx="50%" cy="50%" r="50%">
+                <stop offset="55%" stop-color="#fff" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+              </radialGradient>
+              <mask id="fadeMask"><rect width="200" height="200" fill="url(#fade)"/></mask>
+            </defs>
+            <g mask="url(#fadeMask)" class="grid">
+              <path d="M20 0V200M40 0V200M60 0V200M80 0V200M100 0V200M120 0V200M140 0V200M160 0V200M180 0V200"/>
+              <path d="M0 20H200M0 40H200M0 60H200M0 80H200M0 100H200M0 120H200M0 140H200M0 160H200M0 180H200"/>
+            </g>
+          </svg>
+          <svg class="layer layer-outer" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="78" class="ring"/>
+            <circle cx="100" cy="100" r="70" class="ring ring-dash"/>
+            <g class="ticks">
+              <path d="M100 16v8M100 176v8M16 100h8M176 100h8"/>
+            </g>
+          </svg>
+          <svg class="layer layer-inner" viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="44" class="ring ring-accent"/>
+            <path class="cross" d="M100 70v60M70 100h60"/>
+            <circle cx="100" cy="100" r="3" class="core"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <section class="deck" aria-labelledby="deck-label">
+      <h2 class="section-label" id="deck-label">Status setzen</h2>
+      <div class="deck-grid">
+        <button type="button" class="act" data-status="ACTION" disabled>
+          <span class="act-name">ACTION</span><span class="act-hint">selbst erledigen</span><span class="act-on">aktiv</span>
+        </button>
+        <button type="button" class="act" data-status="WAITING" disabled>
+          <span class="act-name">WAITING</span><span class="act-hint">wartet auf andere</span><span class="act-on">aktiv</span>
+        </button>
+        <button type="button" class="act" data-status="PROJECT" disabled>
+          <span class="act-name">PROJECT</span><span class="act-hint">Projektbezug</span><span class="act-on">aktiv</span>
+        </button>
+        <button type="button" class="act" data-status="DONE" disabled>
+          <span class="act-name">DONE</span><span class="act-hint">erledigt</span><span class="act-on">aktiv</span>
+        </button>
+        <button type="button" class="act act-wide" data-status="REFERENCE" disabled>
+          <span class="act-name">REFERENCE</span><span class="act-hint">zum Nachschlagen</span><span class="act-on">aktiv</span>
+        </button>
+      </div>
+      <p class="note">Setzt nur Kategorien. Nichts wird gelöscht, verschoben oder gesendet.</p>
+    </section>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+
+    <footer class="foot">
+      <span>lokal · kein Tracking · v1.0.0</span>
+      <button type="button" class="motion" id="motion-toggle" aria-pressed="false">Bewegung: an</button>
+    </footer>
+  </main>
+</body>
+</html>

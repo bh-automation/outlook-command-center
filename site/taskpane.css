@@ -1,0 +1,211 @@
+/* Precision Workspace – eigene, deckende Flächen; unabhängig von Hell/Dunkel des Outlook-Hosts. */
+:root {
+  --graphite: #111820;   /* Deep Graphite  – Grundfläche */
+  --navy: #182631;       /* Technical Navy – Karten      */
+  --navy-line: #24394a;  /* Kartenrand                   */
+  --blue: #0071BB;       /* Precision Blue – Akzent ≤5 % */
+  --blue-soft: #4DA3DB;  /* Blau für Text auf Navy (Kontrast) */
+  --frost: #EAF1F5;      /* Frost – Primärtext           */
+  --slate: #66717C;      /* Slate – Linien               */
+  --slate-text: #9AA6B2; /* Slate hell – Sekundärtext    */
+  --radius: 6px;
+  --font: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--graphite);
+  color: var(--frost);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 14px 12px;
+  min-height: 100vh;
+  max-width: 560px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+/* Kopf */
+.head { border-bottom: 1px solid var(--navy-line); padding-bottom: 10px; }
+.eyebrow {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--slate-text);
+}
+.title {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.section-label {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--slate-text);
+}
+
+/* Nachrichtenkontext */
+.context {
+  background: var(--navy);
+  border: 1px solid var(--navy-line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+}
+.ctx-from { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.ctx-subject {
+  margin: 2px 0 8px;
+  color: var(--slate-text);
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ctx-meta { display: flex; gap: 8px; align-items: baseline; font-size: 12px; }
+.ctx-status-label { color: var(--slate-text); }
+.ctx-status { font-weight: 600; letter-spacing: 0.06em; }
+.ctx-status.is-set { color: var(--blue-soft); }
+
+.chips { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.chips li {
+  font-size: 11px;
+  padding: 2px 7px;
+  border: 1px solid var(--navy-line);
+  border-radius: 999px;
+  color: var(--slate-text);
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* Precision Lattice – CSS 2.5D */
+.lattice {
+  height: 118px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.lattice-stage { perspective: 520px; width: 200px; height: 200px; }
+.lattice-object {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  transform-style: preserve-3d;
+  transform: rotateX(62deg) rotateZ(0deg) translateY(0);
+  animation: lattice-drift 9s ease-in-out infinite;
+  will-change: transform;
+}
+.layer { position: absolute; inset: 0; width: 200px; height: 200px; overflow: visible; }
+.layer-grid  { transform: translateZ(0); }
+.layer-outer { transform: translateZ(14px); }
+.layer-inner { transform: translateZ(30px); }
+
+.grid path { stroke: var(--slate); stroke-width: 0.5; fill: none; opacity: 0.55; }
+.ring { fill: none; stroke: var(--frost); stroke-width: 0.8; opacity: 0.55; }
+.ring-dash { stroke-dasharray: 2 5; opacity: 0.4; }
+.ring-accent { stroke: var(--blue); stroke-width: 1.4; opacity: 0.95; }
+.ticks path, .cross { stroke: var(--frost); stroke-width: 0.8; opacity: 0.5; fill: none; }
+.core { fill: var(--blue); }
+
+/* 9 s Zyklus: 86 % Ruhe, 14 % Bewegung (max. 1,5° / 3 px, keine Skalierung) */
+@keyframes lattice-drift {
+  0%, 86%  { transform: rotateX(62deg) rotateZ(0deg)   translateY(0); }
+  93%      { transform: rotateX(62deg) rotateZ(1.5deg) translateY(-3px); }
+  100%     { transform: rotateX(62deg) rotateZ(0deg)   translateY(0); }
+}
+
+.is-hidden .lattice-object,
+.motion-paused .lattice-object { animation-play-state: paused; }
+.motion-reduced .lattice-object { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .lattice-object { animation: none; }
+}
+
+/* Aktionen */
+.deck-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.act {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-height: 52px;
+  padding: 8px 10px;
+  background: var(--navy);
+  color: var(--frost);
+  border: 1px solid var(--navy-line);
+  border-left: 3px solid var(--navy-line);
+  border-radius: var(--radius);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+.act-wide { grid-column: 1 / -1; }
+.act-name { font-weight: 600; font-size: 13px; letter-spacing: 0.08em; }
+.act-hint { font-size: 11px; color: var(--slate-text); }
+.act-on {
+  position: absolute;
+  top: 7px;
+  right: 9px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue-soft);
+  visibility: hidden;
+}
+.act:hover:not(:disabled) { background: #1d2f3c; }
+.act[aria-pressed="true"] { border-left-color: var(--blue); }
+.act[aria-pressed="true"] .act-on { visibility: visible; }
+.act:disabled { cursor: not-allowed; opacity: 0.5; }
+.act:focus-visible, .motion:focus-visible { outline: 2px solid var(--frost); outline-offset: 2px; }
+.act[aria-busy="true"] { opacity: 0.7; }
+
+.note { margin: 6px 0 0; font-size: 11px; color: var(--slate-text); }
+
+.status { margin: 0; min-height: 18px; font-size: 12px; color: var(--slate-text); }
+.status.is-error { color: #F2B8B5; }
+
+/* Fuß */
+.foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid var(--navy-line);
+  font-size: 11px;
+  color: var(--slate-text);
+}
+.motion {
+  background: none;
+  border: none;
+  padding: 2px 0;
+  color: var(--slate-text);
+  font: inherit;
+  cursor: pointer;
+}
+.motion:hover { color: var(--frost); }
+
+@media (max-width: 300px) {
+  .deck-grid { grid-template-columns: 1fr; }
+  .act-wide { grid-column: auto; }
+}
